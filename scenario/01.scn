@@ -1,0 +1,16 @@
+2                     ; number of clients
+
+0    |        |       ; model time start
+
+13   | ^      |       ; first client connect
+24   | W      |       ; first client keydown w
+31   |        | ^     ; second client connect
+50   | w      |       ; first client keyup w
+67   |        | D     ; second client keydown d
+
+89   | ASD    | dAS   ; first client keydown ASD, second client keyup d and keydown AS
+91   | asWD   |       ; first client keyup as and keyup W
+111  | asdw   | as    ; first client keyup wd, second client key keyup as
+
+130  |        |       ; model time end
+
