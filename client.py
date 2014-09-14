@@ -7,15 +7,22 @@ class Client(object):
         self.receive = None
         self.get_time = None
 
+        self.keys = {'w': False, 'a': False, 's': False, 'd': False}
+
     def keypress(self, char):
-        pass
+        if char in self.keys:
+            self.keys[char] = True
 
     def keyup(self, char):
-        pass
+        if char in self.keys:
+            self.keys[char] = False
 
     def mainloop(self):
         pass
 
     def snapshot(self):
         return None
+
+    def __repr__(self):
+        return 'Client %d' % self.id
 
