@@ -2,9 +2,13 @@
 class Server(object):
     def __init__(self):
         self.clients = set()
-        self.message_queue = []
+        self.send = None
+        self.receive = None
+        self.get_time = None
 
-    def queue_message(self, message):
-        self.message_queue.append(message)
+    def mainloop(self):
+        pass
 
+    def snapshot(self):
+        return None
 
