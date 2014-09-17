@@ -29,21 +29,32 @@ class Server(object):
         self.time = self.get_time()
 
         messages = self.receive()
-        rewind_time = self.insert_messages(messages)
+        first_new_message_time, first_new_message_pos = self.insert_messages(messages)
 
-        if rewind_time is None: # no ready clients yet
+        if first_new_message_time is None: # no ready clients yet
             return
 
-        world = self.pick_world(rewind_time)
+        world = self.pick_world(first_new_message_time)
 
         time_end = self.time - self.time % self.model_step
 
+        message_start_pos = first_new_message_pos
         while world.time + self.model_step <= time_end:
-            break
+            messages_to_apply, message_start_pos = self.get_messages_to_apply(message_start_pos, world.time + self.model_step)
+            world.apply_messages(messages_to_apply, world.time + self.model_step)
+            world.model(self.model_step)
 
-    def pick_world(self, rewind_time):
+    def get_messages_to_apply(self, message_start_pos, time_till):
+        messages_to_apply = []
+        while message_start_pos < len(self.messages) and self.messages[message_start_pos]['data']['server_time'] < time_till:
+            messages_to_apply.append(self.messages[message_start_pos])
+            message_start_pos += 1
+        return messages_to_apply, message_start_pos
+
+
+    def pick_world(self, time):
         pos = len(self.snapshots)
-        while pos > 0 and self.snapshots[pos - 1]['time'] > rewind_time:
+        while pos > 0 and self.snapshots[pos - 1]['time'] > time:
             pos -= 1
         self.snapshots = self.snapshots[:pos]
         if pos == 0:
@@ -51,7 +62,8 @@ class Server(object):
         return World.from_snapshot(self.snapshots[pos - 1])
 
     def insert_messages(self, messages):
-        rewind_time = None
+        first_new_message_time = None
+        first_new_message_pos = None
         for message in messages:
             client_id = message['client']
 
@@ -64,9 +76,10 @@ class Server(object):
             if len(self.messages) > 0 and self.messages[-1]['data']['server_time'] - message['data']['server_time'] > self.allowed_lag_compensation_interval:
                 continue
             pos = self.insert_message(message)
-            if rewind_time is None or message['data']['server_time'] < rewind_time:
-                rewind_time = message['data']['server_time']
-        return rewind_time
+            if first_new_message_time is None or message['data']['server_time'] < first_new_message_time:
+                first_new_message_time = message['data']['server_time']
+                first_new_message_pos = pos
+        return first_new_message_time, first_new_message_pos
 
     def insert_message(self, message):
         pos = len(self.messages) # 10
