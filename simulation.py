@@ -9,16 +9,17 @@ class Simulation(object):
         self.end = self.scenario.end
         self.time = self.start
 
-        self.server = Server()
+        self.server = Server(scenario.model_step, scenario.allowed_lag_compensation_interval)
         self.server.queue = []
         self.server.send = self.server_send()
         self.server.receive = self.server_receive()
         self.server.get_time = self.server_time()
         self.server.get_ping = lambda client_id: self.get_client_prop(client_id, 'ping')
+        self.server.setup()
 
         self.clients = []
         for i in range(scenario.clients_number):
-            client = Client()
+            client = Client(scenario.model_step)
             client.id = i
             client.queue = []
             client.connect = self.client_connect(client.id)

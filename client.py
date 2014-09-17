@@ -1,6 +1,6 @@
 
 class Client(object):
-    def __init__(self):
+    def __init__(self, model_step):
         self.id = None
         self.connect = None
         self.send = None
@@ -8,6 +8,7 @@ class Client(object):
         self.get_time = None
 
         self.keys = {'w': False, 'a': False, 's': False, 'd': False}
+        self.model_step = model_step
 
     def keypress(self, char):
         if char in self.keys:
