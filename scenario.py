@@ -2,12 +2,20 @@
 class Scenario(object):
     def __init__(self, file_name):
         lines = self.get_lines(file_name)
+
         self.clients_number = self.read_int(lines)
         self.start = self.read_int(lines)
         self.end = self.read_int(lines)
+        self.model_step = self.read_int(lines)
+        self.client_interpolation_backstep = self.read_int(lines)
+        self.allowed_lag_compensation_interval = self.read_int(lines)
+
         self.read_void(lines)
+
         self.props = self.read_props(lines)
+
         self.read_void(lines)
+
         self.events = self.read_events(lines)
 
     def get_lines(self, file_name):

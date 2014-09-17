@@ -1,23 +1,28 @@
 2                                   ; number of clients
 0                                   ; model start time
-130                                 ; model end time
+2000                                ; model end time
+
+2                                   ; model interval
+100                                 ; client interpolation backstep
+1000                                ; allowed lag compensation interval
 
 --
 
 ; server | client1  | client 2
+
 10000000 | 11000000 | 12000000      ; local time start
          | 200      | 300           ; ping
 40       | 25       | 35            ; main cycle period
 
 --
 
-13   | ^      |                     ; client1 connect
-24   | W      |                     ; client1 keydown w
-31   |        | ^                   ; client2 connect
-50   | w      |                     ; client1 keyup w
-67   |        | D                   ; client2 keydown d
+130   | ^      |                    ; client1 connect
+240   | W      |                    ; client1 keydown w
+310   |        | ^                  ; client2 connect
+500   | w      |                    ; client1 keyup w
+670   |        | D                  ; client2 keydown d
 
-89   | ASD    | dAS                 ; client1 keydown ASD, client2 keyup d and keydown AS
-91   | asWD   |                     ; client1 keyup as and keyup W
-111  | asdw   | as                  ; client1 keyup wd, client2 key keyup as
+890   | ASD    | dAS                ; client1 keydown ASD, client2 keyup d and keydown AS
+910   | asWD   |                    ; client1 keyup as and keyup W
+1110  | asdw   | as                 ; client1 keyup wd, client2 key keyup as
 
