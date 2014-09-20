@@ -7,6 +7,9 @@ class World(object):
     def apply_messages(self, messages):
         pass
 
+    def snapshot(self):
+        return None
+
     @staticmethod
     def from_snapshot(snapshot):
-        return None
+        return World(snapshot.time)

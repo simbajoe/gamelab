@@ -4,7 +4,7 @@ class Server(object):
     MESSAGE_TYPE_CONNECT = 'connect'
     MESSAGE_TYPE_SEND = 'send'
 
-    def __init__(self, model_step, allowed_lag_compensation_interval):
+    def __init__(self, model_step, allowed_lag_compensation_interval, snapshot_interval):
         self.clients = {}
         self.send = None
         self.receive = None
@@ -21,6 +21,7 @@ class Server(object):
         self.start_time = None
         self.next_message_to_apply = None
         self.allowed_lag_compensation_interval = allowed_lag_compensation_interval
+        self.snapshot_interval = snapshot_interval
 
     def setup(self):
         self.start_time = self.get_time()
@@ -39,10 +40,20 @@ class Server(object):
         time_end = self.time - self.time % self.model_step
 
         message_start_pos = first_new_message_pos
+        start_time = world.time
         while world.time + self.model_step <= time_end:
             messages_to_apply, message_start_pos = self.get_messages_to_apply(message_start_pos, world.time + self.model_step)
+            # put code about player last message id and applied period in world
+            # player will need to know this for prediction
             world.apply_messages(messages_to_apply, world.time + self.model_step)
             world.model(self.model_step)
+            time_passed = world.time - start_time
+            if time_passed % self.snapshot_interval:
+                self.snapshots.append(world.snapshot())
+        self.broadcast(world.snapshot())
+
+    def broadcast(self, snapshot):
+        pass
 
     def get_messages_to_apply(self, message_start_pos, time_till):
         messages_to_apply = []

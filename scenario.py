@@ -9,6 +9,7 @@ class Scenario(object):
         self.model_step = self.read_int(lines)
         self.client_interpolation_backstep = self.read_int(lines)
         self.allowed_lag_compensation_interval = self.read_int(lines)
+        self.snapshot_interval = self.read_int(lines)
 
         self.read_void(lines)
 

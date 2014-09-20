@@ -9,7 +9,7 @@ class Simulation(object):
         self.end = self.scenario.end
         self.time = self.start
 
-        self.server = Server(scenario.model_step, scenario.allowed_lag_compensation_interval)
+        self.server = Server(scenario.model_step, scenario.allowed_lag_compensation_interval, scenario.snapshot_interval)
         self.server.queue = []
         self.server.send = self.server_send()
         self.server.receive = self.server_receive()

@@ -5,6 +5,7 @@
 2                                   ; model interval
 100                                 ; client interpolation backstep
 1000                                ; allowed lag compensation interval
+20                                  ; snapshot_interval
 
 --
 
