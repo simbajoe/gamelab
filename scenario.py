@@ -36,6 +36,7 @@ class Scenario(object):
             'local_time_start': self.read_prop(lines, int),
             'ping': self.read_prop(lines, int),
             'main_loop_period': self.read_prop(lines, int),
+            'starting_position': self.read_prop(lines, lambda str: [int(x) for x in str.split()]),
         }
         return props
 

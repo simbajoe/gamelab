@@ -1,5 +1,7 @@
 from client import Client
 from server import Server
+from world import World
+
 
 class Simulation(object):
 
@@ -8,6 +10,8 @@ class Simulation(object):
         self.start = self.scenario.start
         self.end = self.scenario.end
         self.time = self.start
+
+        World.get_player_starting_position =  lambda world, client_id: self.get_client_prop(client_id, 'starting_position')
 
         self.server = Server(scenario.model_step, scenario.allowed_lag_compensation_interval, scenario.snapshot_interval)
         self.server.queue = []
@@ -31,6 +35,7 @@ class Simulation(object):
 
     def run(self):
         for time in range(self.start, self.end + 1):
+            print time
             self.time = time
             yield self.model()
 
@@ -59,9 +64,9 @@ class Simulation(object):
                 self.clients[client_id].connect()
                 continue
             for key in event:
-                event_type = 'keyup'
+                event_type = 'key_up'
                 if key.istitle():
-                    event_type = 'keypress'
+                    event_type = 'key_down'
                 method = getattr(self.clients[client_id], event_type)
                 method(key.lower())
 

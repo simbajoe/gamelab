@@ -2,19 +2,27 @@
 class Client(object):
     def __init__(self, model_step):
         self.id = None
-        self.connect = None
-        self.send = None
-        self.receive = None
-        self.get_time = None
 
         self.keys = {'w': False, 'a': False, 's': False, 'd': False}
         self.model_step = model_step
 
-    def keypress(self, char):
+    def connect(self):
+        raise NotImplementedError()
+
+    def send(self, message):
+        raise NotImplementedError()
+
+    def receive(self):
+        raise NotImplementedError()
+
+    def get_time(self):
+        raise NotImplementedError()
+
+    def key_down(self, char):
         if char in self.keys:
             self.keys[char] = True
 
-    def keyup(self, char):
+    def key_up(self, char):
         if char in self.keys:
             self.keys[char] = False
 
