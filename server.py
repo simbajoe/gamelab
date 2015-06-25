@@ -58,7 +58,8 @@ class Server(object):
         self.broadcast(world.snapshot())
 
     def broadcast(self, snapshot):
-        pass
+        for client_id in self.clients:
+            self.send(client_id, snapshot)
 
     def get_messages_to_apply(self, message_start_pos, time_till):
         messages_to_apply = []

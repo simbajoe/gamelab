@@ -35,7 +35,6 @@ class Simulation(object):
 
     def run(self):
         for time in range(self.start, self.end + 1):
-            print time
             self.time = time
             yield self.model()
 
