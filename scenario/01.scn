@@ -12,7 +12,7 @@
 ; server | client1  | client 2
 
 10000000 | 11000000 | 12000000      ; local time start
-         | 200      | 300           ; ping
+         | 100      | 200           ; ping
 40       | 25       | 35            ; main cycle period
          | 0 0      | 300 400       ; starting position
 

@@ -1,5 +1,5 @@
-from client import Client
-from server import Server
+from client_dumb import ClientDumb
+from server_dumb import ServerDumb
 from world import World
 
 
@@ -13,7 +13,7 @@ class Simulation(object):
 
         World.get_player_starting_position =  lambda world, client_id: self.get_client_prop(client_id, 'starting_position')
 
-        self.server = Server(scenario.model_step, scenario.allowed_lag_compensation_interval, scenario.snapshot_interval)
+        self.server = ServerDumb(scenario.model_step, scenario.allowed_lag_compensation_interval, scenario.snapshot_interval)
         self.server.queue = []
         self.server.send = self.server_send()
         self.server.receive = self.server_receive()
@@ -23,7 +23,7 @@ class Simulation(object):
 
         self.clients = []
         for i in range(scenario.clients_number):
-            client = Client(scenario.model_step)
+            client = ClientDumb(scenario.model_step)
             client.id = i
             client.queue = []
             client.connect = self.client_connect(client.id)
@@ -96,7 +96,7 @@ class Simulation(object):
         def connect():
             self.clients[client_id].connection_time = self.time + self.get_client_prop(client_id, 'ping')
             return self.server.queue.append({
-                'type': Server.MESSAGE_TYPE_CONNECT,
+                'type': ServerDumb.MESSAGE_TYPE_CONNECT,
                 'client': client_id,
                 'delivered': self.clients[client_id].connection_time
             })
@@ -105,7 +105,7 @@ class Simulation(object):
     def client_send(self, client_id):
         def send(message):
             return self.server.queue.append({
-                'type': Server.MESSAGE_TYPE_SEND,
+                'type': ServerDumb.MESSAGE_TYPE_SEND,
                 'client': client_id,
                 'data': message,
                 'delivered': self.time + self.get_client_prop(client_id, 'ping')

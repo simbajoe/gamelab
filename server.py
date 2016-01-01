@@ -15,6 +15,7 @@ class Server(object):
         self.next_message_to_apply = None
         self.allowed_lag_compensation_interval = allowed_lag_compensation_interval
         self.snapshot_interval = snapshot_interval
+        self.last_sent_world_snapshot = None
 
     def send(self, client_id, message):
         raise NotImplementedError()
@@ -58,6 +59,7 @@ class Server(object):
         self.broadcast(world.snapshot())
 
     def broadcast(self, snapshot):
+        self.last_sent_world_snapshot = snapshot
         for client_id in self.clients:
             self.send(client_id, snapshot)
 
@@ -112,7 +114,7 @@ class Server(object):
 
     def get_message_server_time(self, client, message_client_time):
         message_server_time = self.time - client['ping']
-        if client['last_message_time'] is not None and message_client_time is not None:
+        if client['last_message_client_time'] is not None and message_client_time is not None:
             interval_since_last_message = message_client_time - client['last_message_client_time']
             message_server_time = client['last_message_time'] + interval_since_last_message
         client['last_message_time'] = message_server_time
@@ -142,5 +144,5 @@ class Server(object):
         return self.get_ping(client_id)
 
     def snapshot(self):
-        return None
+        return self.last_sent_world_snapshot
 

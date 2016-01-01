@@ -1,3 +1,4 @@
+from world import World
 
 class Client(object):
     def __init__(self, model_step):
@@ -5,6 +6,7 @@ class Client(object):
 
         self.keys = {'w': False, 'a': False, 's': False, 'd': False}
         self.model_step = model_step
+        self.world = None
 
     def connect(self):
         raise NotImplementedError()
@@ -27,9 +29,19 @@ class Client(object):
             self.keys[char] = False
 
     def mainloop(self):
-        pass
+        new_messages = self.receive()
+        if len(new_messages):
+            last_message = new_messages[-1]
+            self.world = World.from_snapshot(last_message['data'])
+        if self.world:
+            self.send({
+                'keys': self.keys,
+                'client_time': self.world.time
+            })
 
     def snapshot(self):
+        if self.world:
+            return self.world.snapshot()
         return None
 
     def __repr__(self):

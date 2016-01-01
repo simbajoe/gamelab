@@ -16,11 +16,17 @@ class World(object):
                 player_id = message['client_id']
                 x, y = self.get_player_starting_position(player_id)
                 self.players[player_id] = Player(x, y)
+            if message['type'] == World.MESSAGE_TYPE_INPUT:
+                player_id = message['client_id']
+                player = self.players[player_id]
+                player.apply_input(message['data']['keys'])
 
     def get_player_starting_position(self, player_id):
         raise NotImplementedError()
 
     def model(self, step):
+        for player_id, player in self.players.items():
+            player.model(step)
         self.time += step
 
     def snapshot(self):
