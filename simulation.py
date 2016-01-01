@@ -49,7 +49,8 @@ class Simulation(object):
                 client.mainloop()
         return {
             'server': self.server.snapshot(),
-            'client': [client.snapshot() for client in self.clients]
+            'client': [client.snapshot() for client in self.clients],
+            'time': self.time
         }
 
     def apply_events(self):

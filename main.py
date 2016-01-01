@@ -19,6 +19,7 @@ if __name__ == '__main__':
     simulation = Simulation(scenario)
     snapshots = [x for x in simulation.run()]
     last_snapshot_string = ""
+    print "var res = ["
     for snapshot in snapshots:
         snapshot_string = json.dumps(snapshot, sort_keys=True, indent=4)
         snapshot_copy = deepcopy(snapshot)
@@ -26,7 +27,8 @@ if __name__ == '__main__':
         snapshot_string_without_time = json.dumps(snapshot_copy)
         if snapshot_string_without_time != last_snapshot_string:
             print snapshot_string
-            print "\n"
+            print ",\n"
             last_snapshot_string = snapshot_string_without_time
+    print "]"
 
 
