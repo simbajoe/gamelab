@@ -4,7 +4,7 @@ class Player(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.speed_abs = 1
+        self.speed_abs = 0.1
         self.speed = {'x': 0, 'y': 0}
 
     def snapshot(self):

@@ -15,7 +15,7 @@ def snapshot_remove_time(snapshot):
 
 if __name__ == '__main__':
 
-    scenario = Scenario('scenario/01.scn')
+    scenario = Scenario('scenario/02.scn')
     simulation = Simulation(scenario)
     snapshots = [x for x in simulation.run()]
     last_snapshot_string = ""

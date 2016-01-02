@@ -47,39 +47,40 @@
         });
         render(res[0]);
         $(document).keypress(function(e) {
-            if (e.which == 13) {
+            if (e.which == 13) { // enter
                 var scroller = $('#scroller')[0];
                 var playTimeLeft = endTime * (1 - scroller.scrollLeft / (scroller.scrollWidth - scroller.clientWidth));
-                playTimeLeft *= 10; // 10 times slower
-                $(scroller).animate({scrollLeft: scroller.scrollWidth}, playTimeLeft);
+                playTimeLeft *= 5; // 5 times slower
+                $(scroller).animate({scrollLeft: scroller.scrollWidth}, playTimeLeft, "linear");
+            }
+            if (e.which == 32) { // space
+                var scroller = $('#scroller')[0];
+                $(scroller).stop().scrollLeft(0);
+            }
+            if (e.which == 91) { // [
+                var scroller = $('#scroller')[0];
+                if (lastFrameN > 0) {
+                    lastFrameN -= 1;
+                    var frame = res[lastFrameN];
+                    render(frame);
+                    var scrollPercentage = frame.time / endTime;
+                    $(scroller).stop().scrollLeft(scrollPercentage * (scroller.scrollWidth - scroller.clientWidth));
+                }
+            }
+            if (e.which == 93) { // ]
+                var scroller = $('#scroller')[0];
+                if (lastFrameN < res.length - 1) {
+                    lastFrameN += 1;
+                    var frame = res[lastFrameN];
+                    render(frame);
+                    var scrollPercentage = frame.time / endTime;
+                    $(scroller).stop().scrollLeft(scrollPercentage * (scroller.scrollWidth - scroller.clientWidth));
+                }
             }
         });
     });
 </script>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    #scroller {
-        width: 100%;
-        height: 20px;
-        background: black;
-        overflow: auto;
-        position: absolute;
-        bottom: 0;
-    }
-    #scroller div {
-        width: 10000%;
-        height: 1px;
-    }
-    .player {
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        border-radius: 10px;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="main.css" />
 <div id="canv"></div>
 <div id="scroller">
     <div></div>
